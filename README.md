@@ -108,6 +108,6 @@ API сервиса скоринга
 *python -m unittest discover -s tests*
 
 ## Требования
-Python >= 3.6
-redis
-fakeredis
+- Python >= 3.6
+- redis
+- fakeredis
