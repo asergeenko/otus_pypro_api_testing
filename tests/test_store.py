@@ -36,5 +36,7 @@ class TestStore(unittest.TestCase):
     def test_connection_ok(self):
         self.server.connected = True
         self.assertEqual(self.store.get('foo'),'bar', False)
-
-
+        
+        
+    if __name__ == "__main__":
+        unittest.main()
