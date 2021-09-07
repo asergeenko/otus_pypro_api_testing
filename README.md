@@ -1,10 +1,26 @@
 # Scoring API
 API сервиса скоринга
 
+[Структура запроса](структура-запроса)
+
+[Структура запроса](структура-ответа)
+
+[Методы](методы)
+
+[online_score](online_score)
+
+[clients_interests](clients_interests)
+
+[Запуск](запуск)
+
+[Параметры](параметры)
+
+[Тестирование](тестирование)
+
 ### Структура запроса
 
-*{"account": "<имя компании партнера>", "login": "<имя пользователя>", "method": "<имя метода>", "token": "
-<аутентификационный токен>", "arguments": {<словарь с аргументами вызываемого метода>}}*
+`{"account": "<имя компании партнера>", "login": "<имя пользователя>", "method": "<имя метода>", "token": "
+<аутентификационный токен>", "arguments": {<словарь с аргументами вызываемого метода>}}`
 
 **account** - строка, опционально, может быть пустым
 
@@ -20,11 +36,11 @@ API сервиса скоринга
 
 **OK**
 
-*{"code": <числовой код>, "response": {<ответ вызываемого метода>}}*
+`{"code": <числовой код>, "response": {<ответ вызываемого метода>}}`
 
 **Ошибка**
 
-*{"code": <числовой код>, "error": {<сообщения об ошибке>}}*
+`{"code": <числовой код>, "error": {<сообщения об ошибке>}}`
 
 ### Методы
 
@@ -48,21 +64,23 @@ API сервиса скоринга
 
 **OK**
 
-*{"score": <число>}*
+`{"score": <число>}`
 
 **Ошибка**
 
-*{"code": 422, "error": "<сообщение о том какое поле(я) невалидно(ы) и как именно>"}*
+`{"code": 422, "error": "<сообщение о том какое поле(я) невалидно(ы) и как именно>"}`
 
 **Пример**
 
-*$ curl -X POST -H "Content-Type: application/json" -d '{"account": "horns&hoofs", "login": "h&f", "method":
+`$ curl -X POST -H "Content-Type: application/json" -d '{"account": "horns&hoofs", "login": "h&f", "method":
 "online_score", "token":
 "55cc9ce545bcd144300fe9efc28e65d415b923ebb6be1e19d2750a2c03e80dd209a27954dca045e5bb12418e7d89b6d718a9e35af34e14e1d5bcd
 "arguments": {"phone": "79175002040", "email": "user@mail.com", "first_name": "Иванов", "last_name":
-"Иван", "birthday": "01.01.1990", "gender": 1}}' http://127.0.0.1:8080/method/*
+"Иван", "birthday": "01.01.1990", "gender": 1}}' http://127.0.0.1:8080/method/`
 
-*{"code": 200, "response": {"score": 5.0}}*
+Ответ:
+
+`{"code": 200, "response": {"score": 5.0}}`
 
 #### clients_interests
 
@@ -78,24 +96,26 @@ API сервиса скоринга
 
 В ответ выдается словарь *<id клиента>:<список интересов>*
 
-*{"client_id1": ["interest1", "interest2" ...], "client2": [...] ...}*
+`{"client_id1": ["interest1", "interest2" ...], "client2": [...] ...}`
 
 **Ошибка**
 
-*{"code": 422, "error": "<сообщение о том какое поле(я) невалидно(ы) и как именно>"}*
+`{"code": 422, "error": "<сообщение о том какое поле(я) невалидно(ы) и как именно>"}`
 
 **Пример**
 
-*$ curl -X POST -H "Content-Type: application/json" -d '{"account": "horns&hoofs", "login": "admin", "method":
+`$ curl -X POST -H "Content-Type: application/json" -d '{"account": "horns&hoofs", "login": "admin", "method":
 "clients_interests", "token":
 "d3573aff1555cd67dccf21b95fe8c4dc8732f33fd4e32461b7fe6a71d83c947688515e36774c00fb630b039fe2223c991f045f13f240913860502
-"arguments": {"client_ids": [1,2,3,4], "date": "20.07.2017"}}' http://127.0.0.1:8080/method/*
+"arguments": {"client_ids": [1,2,3,4], "date": "20.07.2017"}}' http://127.0.0.1:8080/method/`
 
-*{"code": 200, "response": {"1": ["books", "hi-tech"], "2": ["pets", "tv"], "3": ["travel", "music"], "4":
-["cinema", "geek"]}}*
+Ответ:
+
+`{"code": 200, "response": {"1": ["books", "hi-tech"], "2": ["pets", "tv"], "3": ["travel", "music"], "4":
+["cinema", "geek"]}}`
 
 ## Запуск
-*api.py [-p|--port PORT] [-l|--log LOGPATH]*
+`api.py [-p|--port PORT] [-l|--log LOGPATH]`
 
 ### Параметры
 
@@ -105,7 +125,14 @@ API сервиса скоринга
 
 ## Тестирование
 
-*python -m unittest discover -s tests*
+- модульное
+  `python -m unittest discover -s tests/unit`
+
+- функциональное
+  `python -m unittest discover -s tests/func`
+
+- все тесты целиком
+  `python -m unittest discover -s tests`
 
 ## Требования
 - Python >= 3.6
