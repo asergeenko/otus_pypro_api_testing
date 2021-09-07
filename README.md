@@ -126,12 +126,15 @@ API сервиса скоринга
 ## Тестирование
 
 - модульное
+
   `python -m unittest discover -s tests/unit`
 
 - функциональное
+
   `python -m unittest discover -s tests/func`
 
 - все тесты целиком
+  
   `python -m unittest discover -s tests`
 
 ## Требования
