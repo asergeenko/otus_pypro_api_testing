@@ -22,7 +22,7 @@ def retry(num_tries):
                 except (TimeoutError, ConnectionError) as e:
                     time.sleep(delay)
                     delay = min(delay*DELAY_FACTOR, MAX_DELAY)
-                    delay = random.gauss(delay, DELAY_JITTER)
+                    delay = max(random.gauss(delay, DELAY_JITTER),MIN_DELAY)
             raise ConnectionError("Connection failed after %i tries"%(num_tries,))
         return wrapper
     return decorator
@@ -35,7 +35,7 @@ class Storage:
         self.port = port
         self.timeout = timeout
         self.server = None
-        self.connect()
+
 
     def connect(self):
         self.server = redis.Redis(
@@ -48,9 +48,9 @@ class Storage:
         )
 
 
-    def set(self, key, value):
+    def set(self, key, value, expires=None):
         try:
-            return self.server.set(key, value)
+            return self.server.set(key, value, ex=expires)
         except redis.exceptions.TimeoutError:
             raise TimeoutError
         except:
@@ -77,17 +77,15 @@ class Store:
 
     def __init__(self, storage):
         self.storage = storage
-        self.cache = {}
 
     def cache_get(self, key):
-        return self.cache.get(key)
+        return self.storage.get(key)
 
     def cache_set(self, key, value, expires=None):
-        self.cache[key] = value
+        self.storage.set(key, value, expires)
 
     @retry(max_retries)
     def set(self, key, value):
-        self.cache_set(key, value)
         return self.storage.set(key, value)
 
     @retry(max_retries)
@@ -99,5 +97,3 @@ class Store:
                 return self.cache_get(key)
         else:
             return self.storage.get(key)
-
-
